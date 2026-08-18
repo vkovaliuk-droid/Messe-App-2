@@ -347,6 +347,7 @@ ul {
 .bottom-nav {
   position: absolute;
   left: 0;
+  right: 0;
   bottom: 0;
   width: 100%;
   height: var(--nav-height);
@@ -358,44 +359,45 @@ ul {
 }
 
 .bottom-nav button {
-  border: none;
-  background: transparent;
-  color: #94a3b8;
-  font-size: var(--button-font-size);
-  font-weight: bold;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  align-items: center;
-  justify-content: center;
+ height: var(--nav-height);
+ border: none;
+ background: transparent;
+ color: #94a3b8;
+ font-size: var(--button-font-size);
+ font-weight: bold;
+ display: flex;
+ flex-direction: column;
+ gap: 6px;
+ align-items: center;
+ justify-content: center;
+ padding: 10px 0 12px;
+ transition: background 0.2s ease, color 0.2s ease;
 }
-
 .nav-icon {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+ width: 40px;
+ height: 40px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ flex: 0 0 auto;
 }
-
 .nav-icon svg {
-  width: 40px;
-  height: 40px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+ width: 40px;
+ height: 40px;
+ stroke: currentColor;
+ fill: none;
+ stroke-width: 2;
+ stroke-linecap: round;
+ stroke-linejoin: round;
+ display: block;
 }
-
 .nav-label {
-  font-size: var(--button-font-size);
-  line-height: 1;
+ font-size: var(--button-font-size);
+ line-height: 1;
 }
-
 .bottom-nav button.active {
-  color: #ffffff;
-  background: #1e293b;
+ color: #ffffff;
+ background: #1e293b;
 }
 
 @media (orientation: landscape) {
