@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Messe App</title>
+
+  ./manifest.json
+  ./bilder/icon-192.png
+
+  <meta name="theme-color" content="#0f172a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Messe Info">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <style>
+    :root {
+  --app-max-width: 100%;
+  --nav-height: 112px;
+
+  --color-background: #004388;
+  --color-card: #1e293b;
+  --color-nav: #020617;
+  --color-primary: #2563eb;
+  --color-text: #ffffff;
+  --color-muted: #cbd5e1;
+
+  --radius-large: 28px;
+  --radius-medium: 22px;
+
+  --page-padding: 28px;
+  --button-font-size: 16px;
+}
+
+html,
+body,
+div,
+main,
+section,
+nav,
+button,
+img,
+video,
+iframe,
+h1,
+h2,
+h3,
+p,
+ul,
+li,
+span {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #111827;
+  color: var(--color-text);
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+
+body {
+  overflow: hidden;
+}
+
+.app {
+  width: 100%;
+  min-height: 100dvh;
+  height: 100dvh;
+  max-width: var(--app-max-width);
+  margin: 0 auto;
+  background: var(--color-background);
+  position: relative;
+  overflow: hidden;
+}
+
+.content {
+  height: calc(100dvh - var(--nav-height));
+  overflow: hidden;
+  position: relative;
+}
+
+.page {
+  display: none;
+  height: 100%;
+  overflow-y: auto;
+  padding: calc(var(--page-padding) + env(safe-area-inset-top))
+    var(--page-padding)
+    calc(42px + env(safe-area-inset-bottom));
+  -webkit-overflow-scrolling: touch;
+}
+
+.page.active {
+  display: block;
+}
+
+h1 {
+  font-size: clamp(42px, 7vw, 64px);
+  line-height: 1.05;
+  margin: 0 0 16px;
+}
+
+h2 {
+  font-size: clamp(34px, 5vw, 46px);
+  margin: 0 0 24px;
+}
+
+h3 {
+  margin: 0 0 10px;
+  font-size: clamp(22px, 3vw, 28px);
+}
+
+p,
+li {
+  font-size: clamp(14px, 2vw, 18px);
+  line-height: 1.4;
+  color: var(--color-muted);
+}
+
+ul {
+  padding-left: 24px;
+}
+
+.hero {
+  height: 100%;
+  border-radius: var(--radius-large);
+  background:
+    linear-gradient(rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 0.92)),
+    url('https://neuero-farm.de/wp-content/uploads/2026/07/ndv-Kopie.jpg');
+  background-size: cover;
+  background-position: center;
+  padding: 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: relative;
+}
+
+.home-start {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.home-start .hero {
+  flex: 1;
+  min-height: 0;
+}
+
+.home-button {
+  flex: 0 0 auto;
+  margin-top: 0;
+}
+
+.logo {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(255, 255, 255, 0);
+  color: #111827;
+  padding: 12px 18px;
+  border-radius: 14px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.logo img {
+  height: 50px; /* Oder die Höhe, die gut in deinen Header passt */
+  width: auto; /* Die Breite passt sich automatisch an, damit das Logo nicht verzerrt */
+  display: block; /* Verhindert unerwünschte Abstände unter dem Bild */
+}
+
+.hero-text {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto -20px auto;
+  text-align: left;
+}
+
+.primary-button {
+  width: 100%;
+  margin-top: 24px;
+  padding: 22px;
+  border: none;
+  border-radius: var(--radius-medium);
+  background: var(--color-primary);
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.card {
+  background: var(--color-card);
+  border-radius: var(--radius-medium);
+  padding: 24px;
+  margin-bottom: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+}
+
+.brochure-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.brochure-card {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 22px;
+  background: var(--color-card);
+  color: white;
+  border: none;
+  border-radius: var(--radius-medium);
+  text-align: left;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+}
+
+.brochure-card .icon {
+  font-size: 44px;
+  flex: 0 0 auto;
+}
+
+.brochure-card p {
+  margin: 0;
+}
+
+.pdf-overlay {
+  position: absolute;
+  inset: 12px;
+  bottom: calc(var(--nav-height) + 12px);
+  background: #0b1120;
+  border-radius: var(--radius-large);
+  overflow: hidden;
+  display: none;
+  z-index: 50;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.pdf-overlay.active {
+  display: flex;
+  flex-direction: column;
+}
+
+.pdf-header {
+  height: 88px;
+  padding: 14px 18px;
+  background: #111827;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.pdf-header h3 {
+  margin: 2px 0 0;
+  font-size: 22px;
+}
+
+.small-label {
+  font-size: 13px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.close-button {
+  border: none;
+  background: #ef4444;
+  color: white;
+  border-radius: 16px;
+  padding: 14px 18px;
+  font-size: 17px;
+  font-weight: bold;
+  flex: 0 0 auto;
+}
+
+.pdf-overlay iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: white;
+}
+
+.gallery-box {
+  width: 100%;
+  height: min(58vh, 720px);
+  background: #000000;
+  border-radius: var(--radius-large);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: pan-y;
+}
+
+.gallery-box img,
+.gallery-box video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #000000;
+}
+
+.gallery-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 18px 0 14px;
+}
+
+.gallery-controls button {
+  background: var(--color-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 18px;
+  padding: 16px 24px;
+  font-size: 19px;
+  font-weight: bold;
+}
+
+.gallery-controls span {
+  font-size: 20px;
+  color: #e5e7eb;
+}
+
+.hint {
+  margin-top: 0;
+  font-size: 17px;
+  color: #94a3b8;
+}
+
+.bottom-nav {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: var(--nav-height);
+  background: var(--color-nav);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  z-index: 100;
+}
+
+.bottom-nav button {
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  font-size: var(--button-font-size);
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-icon svg {
+  width: 40px;
+  height: 40px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.nav-label {
+  font-size: var(--button-font-size);
+  line-height: 1;
+}
+
+.bottom-nav button.active {
+  color: #ffffff;
+  background: #1e293b;
+}
+
+@media (orientation: landscape) {
+  .app {
+    max-width: 520px;
+  }
+
+  h1 {
+    font-size: 42px;
+  }
+
+  .gallery-box {
+    height: 48vh;
+  }
+}
+
+.hero-text h1 {
+  font-size: 38px;
+  line-height: 1.05;
+  margin: 0 0 16px;
+}
+
+.hero-text p {
+  max-width: 620px;
+  margin-left: 0;
+  margin-right: 0;
+  text-align: left;
+}
+
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <main id="content" class="content">
+
+    <section id="home" class="page active">
+      <div class="home-start">
+      <div class="hero">
+        <div class="logo">
+         <img src="https://neuero-farm.de/wp-content/uploads/2026/07/Logo_NEUERO_full@300x.webp" alt="NEUERO Logo">
+       </div>
+
+        <div class="hero-text">
+          <h1>Durchlaufvorreiniger<br>Typ NDV</h1>
+          <p>Leistungsstarke Vorreinigung mit geringem Platzbedarf – für reibungslose Weiterverarbeitung und Werterhalt der Ernte.</p>
+      </div> 
+    </div>
+          <button class="primary-button home-button" onclick="showPage('info')">
+            Mehr erfahren
+          </button>
+        
+      </div>
+    </section>
+
+    <section id="brochures" class="page">
+      <h2>Prospekte</h2>
+
+      <div class="brochure-list">
+
+        <button class="brochure-card" onclick="openBrochure('Produktkatalog', 'pdf/katalog.pdf')">
+          <span class="icon">📄</span>
+          <div>
+            <h3>Produktkatalog</h3>
+            <p>Alle wichtigen Informationen zum Produkt.</p>
+          </div>
+        </button>
+
+        <button class="brochure-card" onclick="openBrochure('Technisches Datenblatt', 'pdf/datenblatt.pdf')">
+          <span class="icon">📄</span>
+          <div>
+            <h3>Technisches Datenblatt</h3>
+            <p>Maße, Gewicht, Leistung und technische Details.</p>
+          </div>
+        </button>
+
+        <button class="brochure-card" onclick="openBrochure('Unternehmensbroschüre', 'pdf/broschuere.pdf')">
+          <span class="icon">📄</span>
+          <div>
+            <h3>Unternehmensbroschüre</h3>
+            <p>Informationen über das Unternehmen.</p>
+          </div>
+        </button>
+
+      </div>
+    </section>
+
+    <section id="info" class="page">
+      <h2>Informationen</h2>
+
+      <div class="card">
+        <h3>Durchlaufvorreiniger<br>Typ NDV</h3>
+        <p>
+          Hier steht eine kurze und verständliche Beschreibung des Exponats.
+          Verwende möglichst wenig Text, damit Besucher die Informationen schnell erfassen.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Vorteile</h3>
+        <ul>
+          <li>Hohe Leistung</li>
+          <li>Einfache Bedienung</li>
+          <li>Robuste Bauweise</li>
+          <li>Ideal für den professionellen Einsatz</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Technische Daten</h3>
+        <p><strong>Breite:</strong> 2.500 mm</p>
+        <p><strong>Gewicht:</strong> 1.200 kg</p>
+        <p><strong>Leistung:</strong> 80 PS</p>
+      </div>
+    </section>
+
+    <section id="gallery" class="page">
+      <h2>Galerie</h2>
+
+      <div class="gallery-box" id="galleryBox">
+        <img src="https://neuero-farm.de/wp-content/uploads/2025/08/NDV-80-120-1-1024x576.webp" alt="Durchlaufvorreiniger Typ NDV">
+
+        <video id="galleryVideo" controls playsinline style="display: none;">
+          
+        </video>
+      </div>
+
+      <div class="gallery-controls">
+        <button onclick="prevMedia()">Zurück</button>
+        <span id="mediaCounter">1 / 4</span>
+        <button onclick="nextMedia()">Weiter</button>
+      </div>
+
+      <p class="hint">Sie können die Galerie auch nach links oder rechts wischen.</p>
+    </section>
+
+  </main>
+
+  <div id="pdfOverlay" class="pdf-overlay">
+    <div class="pdf-header">
+      <div>
+        <span class="small-label">Prospekt</span>
+        <h3 id="pdfTitle">Produktkatalog</h3>
+      </div>
+
+      <button class="close-button" onclick="closeBrochure()">
+        Schließen
+      </button>
+    </div>
+
+    </iframe>
+  </div>
+  <nav class="dock-nav">
+
+  <button onclick="showPage('home')" id="nav-home" class="dock-item active">
+    <span class="dock-icon">🏠</span>
+    <span class="dock-label">Home</span>
+  </button>
+
+  <button onclick="showPage('brochures')" id="nav-brochures" class="dock-item">
+    <span class="dock-icon">📄</span>
+    <span class="dock-label">Prospekte</span>
+  </button>
+
+  <button onclick="showPage('info')" id="nav-info" class="dock-item">
+    <span class="dock-icon">ℹ️</span>
+    <span class="dock-label">Info</span>
+  </button>
+
+  <button onclick="showPage('gallery')" id="nav-gallery" class="dock-item">
+    <span class="dock-icon">📸</span>
+    <span class="dock-label">Galerie</span>
+  </button>
+
+<nav class="bottom-nav">
+
+  <button onclick="showPage('home')" id="nav-home" class="active">
+    <span class="nav-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 10.5L12 3l9 7.5"></path>
+        <path d="M5 10v10h14V10"></path>
+        <path d="M9 20v-6h6v6"></path>
+      </svg>
+    </span>
+    <span class="nav-label">Home</span>
+  </button>
+
+  <button onclick="showPage('brochures')" id="nav-brochures">
+    <span class="nav-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M7 3h7l5 5v13H7z"></path>
+        <path d="M14 3v5h5"></path>
+        <path d="M9 13h6"></path>
+        <path d="M9 17h6"></path>
+      </svg>
+    </span>
+    <span class="nav-label">Prospekte</span>
+  </button>
+
+  <button onclick="showPage('info')" id="nav-info">
+    <span class="nav-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="9"></circle>
+        <path d="M12 10v7"></path>
+        <path d="M12 7h.01"></path>
+      </svg>
+    </span>
+    <span class="nav-label">Info</span>
+  </button>
+
+  <button onclick="showPage('gallery')" id="nav-gallery">
+    <span class="nav-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="4" y="5" width="16" height="14" rx="2"></rect>
+        <circle cx="9" cy="10" r="1.5"></circle>
+        <path d="M4 16l4.5-4 3.5 3 2.5-2.5L20 17"></path>
+      </svg>
+    </span>
+    <span class="nav-label">Galerie</span>
+  </button>
+
+</nav>
+
+</div>
+
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const inactivityTime = 60000;
+
+  const mediaItems = [
+    {
+      type: "image",
+      src: "bilder/foto1.jpg"
+    },
+    {
+      type: "image",
+      src: "bilder/foto2.jpg"
+    },
+    {
+      type: "image",
+      src: "bilder/foto3.jpg"
+    },
+    {
+      type: "video",
+      src: "videos/produktvideo.mp4"
+    }
+  ];
+
+  let currentMedia = 0;
+  let inactivityTimer;
+
+  function showPage(pageId) {
+    closeBrochure();
+
+    const pages = document.querySelectorAll(".page");
+
+    pages.forEach(function (page) {
+      page.classList.remove("active");
+    });
+
+    const targetPage = document.getElementById(pageId);
+
+    if (targetPage) {
+      targetPage.classList.add("active");
+    }
+
+    const navButtons = document.querySelectorAll(".bottom-nav button");
+
+    navButtons.forEach(function (button) {
+      button.classList.remove("active");
+    });
+
+    const activeButton = document.getElementById("nav-" + pageId);
+
+    if (activeButton) {
+      activeButton.classList.add("active");
+    }
+
+    stopVideo();
+    resetInactivityTimer();
+  }
+
+  window.showPage = showPage;
+
+  function openBrochure(title, filePath) {
+    const overlay = document.getElementById("pdfOverlay");
+    const pdfTitle = document.getElementById("pdfTitle");
+    const pdfFrame = document.getElementById("pdfFrame");
+
+    if (pdfTitle) {
+      pdfTitle.textContent = title;
+    }
+
+    if (pdfFrame) {
+      pdfFrame.src = filePath;
+    }
+
+    if (overlay) {
+      overlay.classList.add("active");
+    }
+
+    resetInactivityTimer();
+  }
+
+  function closeBrochure() {
+    const overlay = document.getElementById("pdfOverlay");
+    const pdfFrame = document.getElementById("pdfFrame");
+
+    if (overlay) {
+      overlay.classList.remove("active");
+    }
+
+    if (pdfFrame) {
+      pdfFrame.src = "";
+    }
+
+    resetInactivityTimer();
+  }
+
+  window.openBrochure = openBrochure;
+  window.closeBrochure = closeBrochure;
+
+  function updateMedia() {
+    const image = document.getElementById("galleryImage");
+    const video = document.getElementById("galleryVideo");
+    const videoSource = document.getElementById("galleryVideoSource");
+    const counter = document.getElementById("mediaCounter");
+
+    const item = mediaItems[currentMedia];
+
+    stopVideo();
+
+    if (item.type === "image") {
+      if (image) {
+        image.style.display = "block";
+        image.src = item.src;
+      }
+
+      if (video) {
+        video.style.display = "none";
+      }
+    }
+
+    if (item.type === "video") {
+      if (image) {
+        image.style.display = "none";
+      }
+
+      if (video && videoSource) {
+        video.style.display = "block";
+        videoSource.src = item.src;
+        video.load();
+      }
+    }
+
+    if (counter) {
+      counter.textContent = currentMedia + 1 + " / " + mediaItems.length;
+    }
+  }
+
+  function nextMedia() {
+    currentMedia = currentMedia + 1;
+
+    if (currentMedia >= mediaItems.length) {
+      currentMedia = 0;
+    }
+
+    updateMedia();
+    resetInactivityTimer();
+  }
+
+  function prevMedia() {
+    currentMedia = currentMedia - 1;
+
+    if (currentMedia < 0) {
+      currentMedia = mediaItems.length - 1;
+    }
+
+    updateMedia();
+    resetInactivityTimer();
+  }
+
+  function stopVideo() {
+    const video = document.getElementById("galleryVideo");
+
+    if (video) {
+      video.pause();
+      video.currentTime = 0;
+    }
+  }
+
+  window.nextMedia = nextMedia;
+  window.prevMedia = prevMedia;
+
+  let startX = 0;
+  let startY = 0;
+  let endX = 0;
+  let endY = 0;
+
+  const galleryBox = document.getElementById("galleryBox");
+
+  if (galleryBox) {
+    galleryBox.addEventListener("touchstart", function (event) {
+      startX = event.touches[0].clientX;
+      startY = event.touches[0].clientY;
+    }, { passive: true });
+
+    galleryBox.addEventListener("touchend", function (event) {
+      endX = event.changedTouches[0].clientX;
+      endY = event.changedTouches[0].clientY;
+      handleSwipe();
+    }, { passive: true });
+  }
+
+  function handleSwipe() {
+    const diffX = startX - endX;
+    const diffY = startY - endY;
+
+    if (Math.abs(diffX) > 60 && Math.abs(diffX) > Math.abs(diffY)) {
+      if (diffX > 0) {
+        nextMedia();
+      } else {
+        prevMedia();
+      }
+    }
+  }
+
+  function resetInactivityTimer() {
+    clearTimeout(inactivityTimer);
+
+    inactivityTimer = setTimeout(function () {
+      closeBrochure();
+      showPage("home");
+    }, inactivityTime);
+  }
+
+  document.addEventListener("touchstart", resetInactivityTimer, { passive: true });
+  document.addEventListener("click", resetInactivityTimer);
+
+  updateMedia();
+  resetInactivityTimer();
+
+});
+  </script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("./service-worker.js");
+    });
+  }
+</script>
+
+</body>
+</html>
