@@ -18,6 +18,7 @@
     :root {
   --app-max-width: 100%;
   --nav-height: 112px;
+  --qr-size: clamp(120px, 18vw, 180px);
 
   --color-background: #004388;
   --color-card: #1e293b;
@@ -517,6 +518,49 @@ ul {
   text-align: left;
 }
 
+.qr-info-box {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  background: var(--color-card);
+  border-radius: var(--radius-medium);
+
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.qr-image {
+  flex: 0 0 var(--qr-size);
+}
+
+.qr-image img {
+  width: var(--qr-size);
+  height: var(--qr-size);
+
+  display: block;
+
+  max-width: 100%;
+  object-fit: contain;
+
+  background: white;
+  border-radius: 12px;
+}
+
+.qr-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.qr-text h3 {
+  margin: 0 0 8px 0;
+  color: white;
+}
+
+.qr-text p {
+  margin: 0;
+}
+
   </style>
 </head>
 
@@ -547,6 +591,21 @@ ul {
 
     <section id="brochures" class="page">
       <h2>Prospekte</h2>
+
+      <div class="qr-info-box">
+
+  <div class="qr-image">
+    <img src="bilder/qr-prospekte.png
+  <div class="qr-text">
+    <h3>Prospekte herunterladen</h3>
+
+    <p>
+      Scannen Sie den QR-Code mit Ihrem Smartphone, um alle Prospekte
+      und Produktinformationen direkt herunterzuladen.
+    </p>
+  </div>
+
+</div>
 
       <div class="brochure-list">
 
