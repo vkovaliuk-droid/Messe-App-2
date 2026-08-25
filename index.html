@@ -149,6 +149,7 @@ ul {
 .hero {
   height: 100%;
   border-radius: var(--radius-large);
+  transition: opacity 0.8s ease;
   background:
     linear-gradient(
      to top,
@@ -885,6 +886,17 @@ document.addEventListener("DOMContentLoaded", function () {
   let currentMedia = 0;
   let inactivityTimer;
 
+  const heroImages = [
+  "bilder/NDV_Bild_Titel.jpg",
+  "bilder/NDV_Bild_3.jpg",
+  "bilder/NDV_Bild_4.jpg"
+  ];
+
+  let currentHero = 0;
+
+  const hero = document.querySelector(".hero");
+
+
   function showPage(pageId) {
     closeBrochure();
 
@@ -1094,6 +1106,37 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.addEventListener("touchstart", resetInactivityTimer, { passive: true });
   document.addEventListener("click", resetInactivityTimer);
+
+setInterval(function () {
+
+  hero.style.opacity = "0.6";
+
+  setTimeout(function () {
+
+    currentHero++;
+
+    if (currentHero >= heroImages.length) {
+      currentHero = 0;
+    }
+
+    hero.style.background =
+      `linear-gradient(
+        to top,
+        rgba(15, 23, 42, 0.99) 0%,
+        rgba(15, 23, 42, 0.7) 25%,
+        rgba(15, 23, 42, 0.2) 45%,
+        rgba(15, 23, 42, 0) 60%
+      ),
+      url('${heroImages[currentHero]}')`;
+
+    hero.style.backgroundSize = "cover";
+    hero.style.backgroundPosition = "center";
+
+    hero.style.opacity = "1";
+
+  }, 400);
+
+}, 7000);
 
   updateMedia();
   resetInactivityTimer();
