@@ -873,7 +873,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (pdfFrame) {
-      pdfFrame.src = filePath;
+      pdfFrame.src = 
+        "pdf-viewer.html?file=" +
+        encodeURIComponent(filePath);
     }
 
     if (overlay) {
@@ -897,6 +899,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     resetInactivityTimer();
   }
+
 
   window.openBrochure = openBrochure;
   window.closeBrochure = closeBrochure;
